@@ -14,64 +14,62 @@ class NavigationService
         GlobeHelper::ORIENTATION_NORTH => [
             GlobeHelper::DIRECTION_LEFT    => [
                 'factor' => -1,
-                'coord'  => 'x',
+                'coord'  => 0, // on X
             ],
             GlobeHelper::DIRECTION_RIGHT   => [
                 'factor' => 1,
-                'coord'  => 'x',
+                'coord'  => 0, // on X
             ],
             GlobeHelper::DIRECTION_FORWARD => [
                 'factor' => 1,
-                'coord'  => 'y',
+                'coord'  => 1, // on Y
             ],
         ],
         GlobeHelper::ORIENTATION_SOUTH => [
             GlobeHelper::DIRECTION_LEFT    => [
                 'factor' => 1,
-                'coord'  => 'x',
+                'coord'  => 0, // on X
             ],
             GlobeHelper::DIRECTION_RIGHT   => [
                 'factor' => -1,
-                'coord'  => 'x',
+                'coord'  => 0, // on X
             ],
             GlobeHelper::DIRECTION_FORWARD => [
                 'factor' => -1,
-                'coord'  => 'y',
+                'coord'  => 1, // on Y
             ],
         ],
         GlobeHelper::ORIENTATION_EAST  => [
             GlobeHelper::DIRECTION_LEFT    => [
                 'factor' => 1,
-                'coord'  => 'y',
+                'coord'  => 1, // on Y
             ],
             GlobeHelper::DIRECTION_RIGHT   => [
                 'factor' => -1,
-                'coord'  => 'y',
+                'coord'  => 1, // on Y
             ],
             GlobeHelper::DIRECTION_FORWARD => [
                 'factor' => 1,
-                'coord'  => 'x',
+                'coord'  => 0, // on X
             ],
         ],
         GlobeHelper::ORIENTATION_WEST  => [
             GlobeHelper::DIRECTION_LEFT    => [
                 'factor' => -1,
-                'coord'  => 'y',
+                'coord'  => 1, // on Y
             ],
             GlobeHelper::DIRECTION_RIGHT   => [
                 'factor' => 1,
-                'coord'  => 'y',
+                'coord'  => 1, // on Y
             ],
             GlobeHelper::DIRECTION_FORWARD => [
                 'factor' => -1,
-                'coord'  => 'x',
+                'coord'  => 0, // on X
             ],
         ],
     ];
 
-    private float $x;
-
-    private float $y;
+    private array $location;
 
     private string $orientation;
 
@@ -81,8 +79,7 @@ class NavigationService
             throw new \UnexpectedValueException("Invalid orientation given: $orientation");
         }
 
-        $this->x           = $x;
-        $this->y           = $y;
+        $this->location    = [$x, $y];
         $this->orientation = $orientation;
         return $this;
     }
@@ -100,13 +97,22 @@ class NavigationService
 
     public function getLocation(): array
     {
-        return [$this->x, $this->y];
+        return $this->location;
+    }
+
+    public function getLatitude(): float
+    {
+        return $this->location[0];
+    }
+
+    public function getLongitude(): float
+    {
+        return $this->location[1];
     }
 
     private function move(float $step, array $navigation)
     {
-        $point = &$this->$navigation['coord'];
-        $point += $step * $navigation['factor'];
+        $this->location[$navigation['coord']] += $step * $navigation['factor'];
     }
 
 }
