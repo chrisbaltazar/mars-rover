@@ -27,8 +27,8 @@ class NavigationRequest extends FormRequest
         return [
             'originX'      => 'required|numeric',
             'originY'      => 'required|numeric',
-            'width'        => 'required|numeric',
-            'height'       => 'required|numeric',
+            'width'        => 'required|numeric|min:1',
+            'height'       => 'required|numeric|min:1',
             'orientation'  => 'required|string',
             'instructions' => 'required|string',
         ];
