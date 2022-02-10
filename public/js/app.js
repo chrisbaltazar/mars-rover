@@ -5444,9 +5444,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, null, [[2, 10]]);
       }))();
     }
-  },
-  mounted: function mounted() {
-    console.log('navigation');
   }
 });
 
@@ -29106,7 +29103,7 @@ var render = function () {
                   _vm._v(" "),
                   _c("div", { staticClass: "col-4" }, [
                     _c("label", { staticClass: "form-label" }, [
-                      _vm._v("Oriertation"),
+                      _vm._v("Orientation"),
                     ]),
                     _vm._v(" "),
                     _c(

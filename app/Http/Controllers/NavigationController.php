@@ -20,13 +20,21 @@ class NavigationController
         $orientation  = $request->input('orientation');
         $instructions = Str::upper($request->input('instructions'));
 
+        // calculate the relative surface area for each square on X and Y
+        $relativeWidth  = round($width / 2, 1);
+        $relativeHeight = round($height / 2, 1);
+        if (abs($originX) > $relativeWidth || abs($originY) > $relativeHeight) {
+            return response()->json('The surface and origin data is wrong',
+                400);
+        }
+
         try {
             $navigation->setLocation($originX, $originY, $orientation);
             for ($i = 0; $i < strlen($instructions); $i++) {
                 $navigation->makeTurn($instructions[$i]);
-                if ($navigation->getLatitude() > $height || $navigation->getLongitude() > $width) {
+                if ($navigation->getLatitude() > $relativeHeight || $navigation->getLongitude() > $relativeWidth) {
                     $commands     = Str::substr($instructions, 0, $i + 1);
-                    $errorMessage = sprintf('Vehicle out of limits. Commands executed: %s. Last point located: (%s, %s)',
+                    $errorMessage = sprintf('Vehicle out of limits. Commands executed: [%s]. Last point located: (%s, %s)',
                         $commands, $navigation->getLongitude(),
                         $navigation->getLatitude());
                     return response()->json($errorMessage, 400);

@@ -31,7 +31,7 @@
                                        placeholder="y" required>
                             </div>
                             <div class="col-4">
-                                <label class="form-label">Oriertation</label>
+                                <label class="form-label">Orientation</label>
                                 <select class="form-control" v-model="formData.orientation" required>
                                     <option value="N">NORTH</option>
                                     <option value="S">SOUTH</option>
@@ -93,9 +93,6 @@ export default {
             }
             this.loading = false
         },
-    },
-    mounted() {
-        console.log('navigation')
     }
 }
 </script>
