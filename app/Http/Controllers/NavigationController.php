@@ -17,7 +17,7 @@ class NavigationController
         $height       = $request->input('height');
         $originX      = $request->input('originX');
         $originY      = $request->input('originY');
-        $orientation  = $request->input('orientation');
+        $orientation  = Str::upper($request->input('orientation'));
         $instructions = Str::upper($request->input('instructions'));
 
         // calculate the relative surface area for each square on X and Y
@@ -32,7 +32,7 @@ class NavigationController
             $navigation->setLocation($originX, $originY, $orientation);
             for ($i = 0; $i < strlen($instructions); $i++) {
                 $navigation->makeTurn($instructions[$i]);
-                if ($navigation->getLatitude() > $relativeHeight || $navigation->getLongitude() > $relativeWidth) {
+                if (abs($navigation->getLatitude()) > $relativeWidth || abs($navigation->getLongitude()) > $relativeHeight) {
                     $commands     = Str::substr($instructions, 0, $i + 1);
                     $errorMessage = sprintf('Vehicle out of limits. Commands executed: [%s]. Last point located: (%s, %s)',
                         $commands, $navigation->getLongitude(),
