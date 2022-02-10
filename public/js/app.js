@@ -5371,13 +5371,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       formData: {
         width: 200,
         height: 200
-      }
+      },
+      missionReport: '',
+      errorMessage: '',
+      loading: false
     };
   },
   methods: {
@@ -5390,20 +5400,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.prev = 0;
-                _context.next = 3;
+                _this.missionReport = '';
+                _this.errorMessage = '';
+                _context.prev = 2;
+                _this.loading = true;
+                _context.next = 6;
                 return axios.post('/api/navigate', _this.formData);
 
-              case 3:
+              case 6:
                 response = _context.sent;
-                console.log(response);
-                alert('ok');
-                _context.next = 14;
+                _this.missionReport = response.data;
+                _context.next = 16;
                 break;
 
-              case 8:
-                _context.prev = 8;
-                _context.t0 = _context["catch"](0);
+              case 10:
+                _context.prev = 10;
+                _context.t0 = _context["catch"](2);
                 console.log(_context.t0.response);
                 msg = [];
 
@@ -5419,14 +5431,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   msg = 'Unknown error';
                 }
 
-                alert(msg);
+                _this.errorMessage = msg;
 
-              case 14:
+              case 16:
+                _this.loading = false;
+
+              case 17:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 8]]);
+        }, _callee, null, [[2, 10]]);
       }))();
     }
   },
@@ -28938,6 +28953,7 @@ var render = function () {
           _c(
             "form",
             {
+              staticClass: "mb-3",
               on: {
                 submit: function ($event) {
                   $event.preventDefault()
@@ -29184,11 +29200,36 @@ var render = function () {
                 }),
               ]),
               _vm._v(" "),
-              _c("button", { staticClass: "btn btn-success btn-lg" }, [
-                _vm._v("Send commands"),
-              ]),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-success btn-lg",
+                  attrs: { disabled: _vm.loading },
+                },
+                [_vm._v("Send commands")]
+              ),
             ]
           ),
+          _vm._v(" "),
+          _vm.missionReport
+            ? _c("div", { staticClass: "alert alert-primary" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.missionReport) +
+                    "\n            "
+                ),
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.errorMessage
+            ? _c("div", { staticClass: "alert alert-danger" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.errorMessage) +
+                    "\n            "
+                ),
+              ])
+            : _vm._e(),
         ]
       ),
     ]),

@@ -2,7 +2,7 @@
     <div id="navigation-form">
         <div class="row">
             <div class="col-10 offset-1 offset-lg-3 col-lg-6 text-center">
-                <form @submit.prevent="submit">
+                <form class="mb-3" @submit.prevent="submit">
                     <h3 class="mb-5">Mars Rover Mission Control</h3>
                     <div class="mb-3">
                         <div class="row">
@@ -46,8 +46,15 @@
                         <input type="text" class="form-control" v-model="formData.instructions" placeholder="navigation"
                                required>
                     </div>
-                    <button class="btn btn-success btn-lg">Send commands</button>
+                    <button class="btn btn-success btn-lg" :disabled="loading">Send commands</button>
                 </form>
+
+                <div class="alert alert-primary" v-if="missionReport">
+                    {{missionReport}}
+                </div>
+                <div class="alert alert-danger" v-if="errorMessage">
+                    {{errorMessage}}
+                </div>
             </div>
         </div>
     </div>
@@ -57,15 +64,20 @@
 export default {
     data() {
         return {
-            formData: {width: 200, height: 200}
+            formData: {width: 200, height: 200},
+            missionReport: '',
+            errorMessage: '',
+            loading: false
         }
     },
     methods: {
         async submit() {
+            this.missionReport = ''
+            this.errorMessage = ''
             try {
+                this.loading = true
                 const response = await axios.post('/api/navigate', this.formData)
-                console.log(response)
-                alert('ok')
+                this.missionReport = response.data
             } catch (error) {
                 console.log(error.response)
                 let msg = []
@@ -77,8 +89,9 @@ export default {
                 }else {
                     msg = 'Unknown error'
                 }
-                alert(msg)
+                this.errorMessage = msg
             }
+            this.loading = false
         },
     },
     mounted() {
