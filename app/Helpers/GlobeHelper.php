@@ -37,16 +37,4 @@ class GlobeHelper
         ]);
     }
 
-    public static function isLatitud(string $orientation): bool
-    {
-        return in_array($orientation,
-            [self::ORIENTATION_NORTH, self::ORIENTATION_SOUTH]);
-    }
-
-    public static function isLongitude(string $orientation): bool
-    {
-        return in_array($orientation,
-            [self::ORIENTATION_EAST, self::ORIENTATION_WEST]);
-    }
-
 }
