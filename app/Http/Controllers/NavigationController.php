@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\SurfaceHelper;
 use App\Http\Requests\NavigationRequest;
 use App\Services\NavigationService;
 use Illuminate\Support\Str;
@@ -20,10 +21,8 @@ class NavigationController
         $orientation  = Str::upper($request->input('orientation'));
         $instructions = Str::upper($request->input('instructions'));
 
-        // calculate the relative surface area for each square on X and Y
-        $relativeWidth  = round($width / 2, 1);
-        $relativeHeight = round($height / 2, 1);
-        if (abs($originX) > $relativeWidth || abs($originY) > $relativeHeight) {
+        if (SurfaceHelper::outOfBoundaries($width, $height, $originX,
+            $originY)) {
             return response()->json('The surface and origin data is wrong',
                 400);
         }
@@ -32,7 +31,8 @@ class NavigationController
             $navigation->setLocation($originX, $originY, $orientation);
             for ($i = 0; $i < strlen($instructions); $i++) {
                 $navigation->makeTurn($instructions[$i]);
-                if (abs($navigation->getLatitude()) > $relativeWidth || abs($navigation->getLongitude()) > $relativeHeight) {
+                if (SurfaceHelper::outOfBoundaries($width, $height,
+                    $navigation->getLatitude(), $navigation->getLongitude())) {
                     $commands     = Str::substr($instructions, 0, $i + 1);
                     $errorMessage = sprintf('Vehicle out of limits. Commands executed: [%s]. Last point located: (%s, %s)',
                         $commands, $navigation->getLongitude(),
