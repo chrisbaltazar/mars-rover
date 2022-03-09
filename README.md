@@ -3,6 +3,8 @@
 The test is based on a hypothetical surface with any defined measures in which the origin
 is located right in the center of it like in any Cartesian map using the coords (0,0) and the axis X and Y.
 
+Please refer to the README.pdf file for more details about the test. 
+
 ## Installation
 
 - clone the repository in your local PC
